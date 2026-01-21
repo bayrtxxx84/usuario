@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "usuarios")
 public class UsuarioEntityDb {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -25,5 +25,4 @@ public class UsuarioEntityDb {
     private String apellidoUsuario;
     private String emailUsuario;
     private String passwordUsuario;
-    private String passwordConfirmar;
 }

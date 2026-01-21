@@ -3,6 +3,8 @@ package com.uce.usuario.logic.usercases;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uce.usuario.controllers.data.converters.EntityConverters;
+import com.uce.usuario.controllers.data.entities.UsuarioEntityUI;
 import com.uce.usuario.data.entities.db.UsuarioEntityDb;
 import com.uce.usuario.data.repository.UsuarioRepository;
 import com.uce.usuario.logic.validators.Result;
@@ -13,33 +15,25 @@ public class RegisterUsuarioUserCase {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Result<UsuarioEntityDb> registerUser(
+    public Result<UsuarioEntityUI> execute(
             String nombre,
             String apellido,
             String email,
-            String password,
-            String passwordConfirmar) {
+            String password) {
 
-        Result<UsuarioEntityDb> result;
-
-        // 1. Validaciones básicas de negocio
-        if (!password.equals(passwordConfirmar)) {
-            return Result.failure(new Exception("Las contraseñas no coinciden"));
-        }
+        Result<UsuarioEntityUI> result;
 
         try {
             var usuarioBuilder = UsuarioEntityDb.builder()
                     .nombreUsuario(nombre)
                     .apellidoUsuario(apellido)
                     .emailUsuario(email)
-                    .passwordUsuario(password)                    
-                    .passwordConfirmar(passwordConfirmar);
+                    .passwordUsuario(password);
 
             var usuario = usuarioBuilder.build();
-
             var usuarioSaved = usuarioRepository.save(usuario);
-            
-            result = Result.success(usuarioSaved);
+            result = Result.success(
+                    EntityConverters.usuarioEntityDbToUI(usuarioSaved));
 
         } catch (Exception e) {
             result = Result.failure(e);

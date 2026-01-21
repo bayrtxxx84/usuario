@@ -14,28 +14,26 @@ public class EditUsuarioUserCase {
     private UsuarioRepository usuarioRepository;
 
     public Result<UsuarioEntityDb> updateUser(Integer id,
-        String nombre, String apellido, String email
-    ){
-        try{
+            String nombre, String apellido, String email) {
+        try {
             var usuarioOptional = usuarioRepository.findById(id);
             if (usuarioOptional.isEmpty()) {
                 return Result.failure(new Exception("Usuario no encontrado con ID: " + id));
             }
-            
+
             UsuarioEntityDb existingUser = usuarioOptional.get();
-            
+
             var updatedUser = UsuarioEntityDb.builder()
-                    .id(existingUser.getId()) 
+                    .id(existingUser.getId())
                     .nombreUsuario(nombre)
                     .apellidoUsuario(apellido)
                     .emailUsuario(email)
-                    .passwordUsuario(existingUser.getPasswordUsuario()) 
-                    .passwordConfirmar(existingUser.getPasswordConfirmar())
+                    .passwordUsuario(existingUser.getPasswordUsuario())
                     .build();
 
             var saved = usuarioRepository.save(updatedUser);
             return Result.success(saved);
-        }catch(Exception e){
+        } catch (Exception e) {
             return Result.failure(e);
         }
     }

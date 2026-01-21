@@ -15,7 +15,7 @@ public class DeleteUsuarioUserCase {
      public Result<Boolean> deleteUser(Integer id) {
         try {
             if (!usuarioRepository.existsById(id)) {
-                return Result.failure(new Exception("No se puede eliminar: Usuario no existe"));
+                return Result.failure(new Exception("Usuario no existe"));
             }
             usuarioRepository.deleteById(id);
             return Result.success(true);
